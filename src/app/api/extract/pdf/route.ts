@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     let text = data.text.replace(/\n\s*\n/g, '\n\n');
     
     return NextResponse.json({ text });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || "Failed to parse PDF" }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ error: (error as Error).message || "Failed to parse PDF" }, { status: 500 });
   }
 }

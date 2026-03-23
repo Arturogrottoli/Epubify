@@ -1,0 +1,317 @@
+﻿
+> epubify-app@0.1.0 build
+> next build
+
+  Ôû▓ Next.js 14.2.35
+
+   Creating an optimized production build ...
+ Ô£ô (pwa) Compiling for server...
+ Ô£ô (pwa) Compiling for server...
+ Ô£ô (pwa) Compiling for client (static)...
+ Ôùï (pwa) Service worker: D:\Proyectos Visual\epubify\public\sw.js
+ Ôùï (pwa)   URL: /sw.js
+ Ôùï (pwa)   Scope: /
+node.exe : <w> [webpack
+.cache.PackFileCacheStr
+ategy] Skipped not 
+serializable cache 
+item 'Compilation/modul
+es|D:\Proyectos Visual\
+epubify\node_modules\ne
+xt\dist\build\webpack\l
+oaders\css-loader\src\i
+ndex.js??ruleSet[1].rul
+es[14].oneOf[12].use[2]
+!D:\Proyectos Visual\ep
+ubify\node_modules\next
+\dist\build\webpack\loa
+ders\postcss-loader\src
+\index.js??ruleSet[1].r
+ules[14].oneOf[12].use[
+3]!D:\Proyectos Visual\
+epubify\src\app\globals
+.css': No serializer 
+registered for 
+PostCSSSyntaxError
+En C:\Program 
+Files\nodejs\npm.ps1: 
+29 Carácter: 3
++   & $NODE_EXE 
+$NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (<w> [webpack.   
+ ca...tCSSSyntaxErr    
+or:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+<w> while serializing w
+ebpack/lib/cache/PackFi
+leCacheStrategy.PackCon
+tentItems -> webpack/li
+b/NormalModule -> webpa
+ck/lib/ModuleBuildError
+ -> PostCSSSyntaxError
+Failed to compile.
+
+./src/app/globals.css:3
+:1
+Syntax error: 
+D:\Proyectos Visual\epu
+bify\src\app\globals.cs
+s The 
+`outline-ring/50` 
+class does not exist. 
+If `outline-ring/50` 
+is a custom class, 
+make sure it is 
+defined within a 
+`@layer` directive.
+
+ [90m 1 | 
+[39m[36m@import[39m 
+[32m"tw-animate-css"[
+39m[33m;[39m
+ [90m 2 | 
+[39m[36m@import[39m 
+[32m"shadcn/tailwind.c
+ss"[39m[33m;[39m
+[1m[31m>[39m[22m[9
+0m 3 | [39m[36m@tailw
+ind[39m 
+base[33m;[39m
+ [90m   | [39m[1m[3
+1m^[39m[22m
+ [90m 4 | [39m[36m@t
+ailwind[39m 
+components[33m;[39m
+ [90m 5 | [39m[36m@t
+ailwind[39m 
+utilities[33m;[39m
+
+./src/app/globals.css
+Syntax error: 
+D:\Proyectos Visual\epu
+bify\src\app\globals.cs
+s The 
+`outline-ring/50` 
+class does not exist. 
+If `outline-ring/50` 
+is a custom class, 
+make sure it is 
+defined within a 
+`@layer` directive. 
+(3:1)
+
+ [90m 1 | 
+[39m[36m@import[39m 
+[32m"tw-animate-css"[
+39m[33m;[39m
+ [90m 2 | 
+[39m[36m@import[39m 
+[32m"shadcn/tailwind.c
+ss"[39m[33m;[39m
+[1m[31m>[39m[22m[9
+0m 3 | [39m[36m@tailw
+ind[39m 
+base[33m;[39m
+ [90m   | [39m[1m[3
+1m^[39m[22m
+ [90m 4 | [39m[36m@t
+ailwind[39m 
+components[33m;[39m
+ [90m 5 | [39m[36m@t
+ailwind[39m 
+utilities[33m;[39m
+
+    at 
+tryRunOrWebpackError 
+(D:\Proyectos Visual\ep
+ubify\node_modules\next
+\dist\compiled\webpack\
+bundle5.js:28:312989)
+    at __webpack_requir
+e_module__ 
+(D:\Proyectos Visual\ep
+ubify\node_modules\next
+\dist\compiled\webpack\
+bundle5.js:28:131165)
+    at __nested_webpack
+_require_153728__ 
+(D:\Proyectos Visual\ep
+ubify\node_modules\next
+\dist\compiled\webpack\
+bundle5.js:28:130607)
+    at D:\Proyectos Vis
+ual\epubify\node_module
+s\next\dist\compiled\we
+bpack\bundle5.js:28:131
+454
+    at symbolIterator 
+(D:\Proyectos Visual\ep
+ubify\node_modules\next
+\dist\compiled\neo-asyn
+c\async.js:1:14444)
+    at done 
+(D:\Proyectos Visual\ep
+ubify\node_modules\next
+\dist\compiled\neo-asyn
+c\async.js:1:14824)
+    at Hook.eval [as 
+callAsync] (eval at 
+create (D:\Proyectos Vi
+sual\epubify\node_modul
+es\next\dist\compiled\w
+ebpack\bundle5.js:13:28
+858), <anonymous>:15:1)
+    at Hook.CALL_ASYNC_
+DELEGATE [as 
+_callAsync] 
+(D:\Proyectos Visual\ep
+ubify\node_modules\next
+\dist\compiled\webpack\
+bundle5.js:13:26012)
+    at D:\Proyectos Vis
+ual\epubify\node_module
+s\next\dist\compiled\we
+bpack\bundle5.js:28:130
+328
+    at symbolIterator 
+(D:\Proyectos Visual\ep
+ubify\node_modules\next
+\dist\compiled\neo-asyn
+c\async.js:1:14402)
+-- inner error --
+Syntax error: 
+D:\Proyectos Visual\epu
+bify\src\app\globals.cs
+s The 
+`outline-ring/50` 
+class does not exist. 
+If `outline-ring/50` 
+is a custom class, 
+make sure it is 
+defined within a 
+`@layer` directive. 
+(3:1)
+
+ [90m 1 | 
+[39m[36m@import[39m 
+[32m"tw-animate-css"[
+39m[33m;[39m
+ [90m 2 | 
+[39m[36m@import[39m 
+[32m"shadcn/tailwind.c
+ss"[39m[33m;[39m
+[1m[31m>[39m[22m[9
+0m 3 | [39m[36m@tailw
+ind[39m 
+base[33m;[39m
+ [90m   | [39m[1m[3
+1m^[39m[22m
+ [90m 4 | [39m[36m@t
+ailwind[39m 
+components[33m;[39m
+ [90m 5 | [39m[36m@t
+ailwind[39m 
+utilities[33m;[39m
+
+    at 
+Object.<anonymous> 
+(D:\Proyectos Visual\ep
+ubify\node_modules\next
+\dist\build\webpack\loa
+ders\css-loader\src\ind
+ex.js??ruleSet[1].rules
+[14].oneOf[12].use[2]!D
+:\Proyectos Visual\epub
+ify\node_modules\next\d
+ist\build\webpack\loade
+rs\postcss-loader\src\i
+ndex.js??ruleSet[1].rul
+es[14].oneOf[12].use[3]
+!D:\Proyectos Visual\ep
+ubify\src\app\globals.c
+ss:1:7)
+    at D:\Proyectos Vis
+ual\epubify\node_module
+s\next\dist\compiled\we
+bpack\bundle5.js:28:922
+493
+    at Hook.eval [as 
+call] (eval at create 
+(D:\Proyectos Visual\ep
+ubify\node_modules\next
+\dist\compiled\webpack\
+bundle5.js:13:28636), 
+<anonymous>:7:1)
+    at 
+Hook.CALL_DELEGATE [as 
+_call] (D:\Proyectos Vi
+sual\epubify\node_modul
+es\next\dist\compiled\w
+ebpack\bundle5.js:13:25
+906)
+    at D:\Proyectos Vis
+ual\epubify\node_module
+s\next\dist\compiled\we
+bpack\bundle5.js:28:131
+198
+    at 
+tryRunOrWebpackError 
+(D:\Proyectos Visual\ep
+ubify\node_modules\next
+\dist\compiled\webpack\
+bundle5.js:28:312943)
+    at __webpack_requir
+e_module__ 
+(D:\Proyectos Visual\ep
+ubify\node_modules\next
+\dist\compiled\webpack\
+bundle5.js:28:131165)
+    at __nested_webpack
+_require_153728__ 
+(D:\Proyectos Visual\ep
+ubify\node_modules\next
+\dist\compiled\webpack\
+bundle5.js:28:130607)
+    at D:\Proyectos Vis
+ual\epubify\node_module
+s\next\dist\compiled\we
+bpack\bundle5.js:28:131
+454
+    at symbolIterator 
+(D:\Proyectos Visual\ep
+ubify\node_modules\next
+\dist\compiled\neo-asyn
+c\async.js:1:14444)
+
+Generated code for 
+D:\Proyectos Visual\epu
+bify\node_modules\next\
+dist\build\webpack\load
+ers\css-loader\src\inde
+x.js??ruleSet[1].rules[
+14].oneOf[12].use[2]!D:
+\Proyectos Visual\epubi
+fy\node_modules\next\di
+st\build\webpack\loader
+s\postcss-loader\src\in
+dex.js??ruleSet[1].rule
+s[14].oneOf[12].use[3]!
+D:\Proyectos Visual\epu
+bify\src\app\globals.cs
+s
+
+Import trace for 
+requested module:
+./src/app/globals.css
+
+
+> Build failed because 
+of webpack errors

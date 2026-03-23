@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     }
     
     return NextResponse.json({ title, content });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || "Failed to extract URL" }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ error: (error as Error).message || "Failed to extract URL" }, { status: 500 });
   }
 }

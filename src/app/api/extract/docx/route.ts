@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const result = await mammoth.convertToHtml({ buffer: Buffer.from(buffer) });
     
     return NextResponse.json({ html: result.value });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || "Failed to parse DOCX" }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ error: (error as Error).message || "Failed to parse DOCX" }, { status: 500 });
   }
 }

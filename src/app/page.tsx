@@ -119,8 +119,8 @@ export default function Home() {
       }]);
       toast.success("URL extracted successfully!");
       setUrlInput("");
-    } catch (err: any) {
-      toast.error(err.message || "Failed to extract URL");
+    } catch (err) {
+      toast.error((err as Error).message || "Failed to extract URL");
     } finally {
       setIsExtracting(false);
     }
@@ -169,8 +169,8 @@ export default function Home() {
                 sourceInfo: file.name
             }]);
             toast.success(`Extracted: ${file.name}`);
-        } catch(err: any) {
-            toast.error(`Failed to extract ${file.name}: ${err.message}`);
+        } catch(err) {
+            toast.error(`Failed to extract ${file.name}: ${(err as Error).message}`);
         }
     }
     setIsExtracting(false);
@@ -212,8 +212,8 @@ export default function Home() {
       URL.revokeObjectURL(url);
       
       toast.success("EPUB downloaded successfully!");
-    } catch(err: any) {
-      toast.error("Failed to generate EPUB: " + err.message);
+    } catch(err) {
+      toast.error("Failed to generate EPUB: " + (err as Error).message);
     } finally {
       setIsGenerating(false);
     }
