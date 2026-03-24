@@ -255,6 +255,23 @@ export default function Home() {
     }
   }
 
+  const handleMergeChapters = () => {
+    if (chapters.length <= 1) {
+      toast('Need 2+ chapters to merge.', { variant: 'warning' });
+      return;
+    }
+
+    const mergedHtml = chapters
+      .map((ch, idx) => `
+<section id="merged-chapter-${idx}">
+  <h1>${ch.title.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</h1>
+  ${ch.content}
+</section>`)
+      .join('\n<hr />\n');
+
+    setChapters([{ id: crypto.randomUUID(), title: 'Merged Document', content: mergedHtml, sourceInfo: 'Merged Chapters' }]);
+    toast.success(`Merged ${chapters.length} chapters into one.`);
+  }
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -447,7 +464,14 @@ export default function Home() {
                   </DndContext>
                 )}
               </CardContent>
-              <CardFooter>
+              <CardFooter className="flex flex-col gap-2">
+                <Button 
+                  className="w-full h-12 text-md transition-all hover:scale-[1.02]" 
+                  onClick={handleMergeChapters}
+                  disabled={chapters.length <= 1 || isGenerating}
+                >
+                  Merge chapters into one
+                </Button>
                 <Button 
                   className="w-full h-12 text-md transition-all hover:scale-[1.02]" 
                   onClick={handleDownloadEpub}
