@@ -71,6 +71,8 @@ export default function Home() {
   const [urlInput, setUrlInput] = useState("")
   const [textTitle, setTextTitle] = useState("")
   const [textContent, setTextContent] = useState("")
+  const [emailSubject, setEmailSubject] = useState("")
+  const [emailContent, setEmailContent] = useState("")
   const [isExtracting, setIsExtracting] = useState(false)
   const [metadata, setMetadata] = useState({ title: "My Custom Book", author: "EPUBify User" })
   const [isGenerating, setIsGenerating] = useState(false)
@@ -82,7 +84,9 @@ export default function Home() {
     if (saved) {
       try {
         setChapters(JSON.parse(saved))
-      } catch (e) {}
+      } catch {
+        // ignore parse error
+      }
     }
   }, [])
 
@@ -121,6 +125,38 @@ export default function Home() {
       setUrlInput("");
     } catch (err) {
       toast.error((err as Error).message || "Failed to extract URL");
+    } finally {
+      setIsExtracting(false);
+    }
+  }
+
+  const handleEmailExtract = async () => {
+    if (!emailContent && !emailSubject) return;
+    setIsExtracting(true);
+    try {
+      const res = await fetch("/api/extract/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subject: emailSubject,
+          html: emailContent,
+          baseUrl: urlInput || window.location.origin,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      setChapters(prev => [...prev, {
+        id: crypto.randomUUID(),
+        title: data.title,
+        content: data.content,
+        sourceInfo: `Email: ${emailSubject || 'No subject'}`
+      }]);
+      toast.success("Email contenido agregado!");
+      setEmailSubject("");
+      setEmailContent("");
+    } catch (err) {
+      toast.error((err as Error).message || "Failed to extract email content");
     } finally {
       setIsExtracting(false);
     }
@@ -234,9 +270,10 @@ export default function Home() {
           </div>
           
           <Tabs defaultValue="file" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="file"><FileUp className="w-4 h-4 mr-2"/> File</TabsTrigger>
               <TabsTrigger value="url"><LinkIcon className="w-4 h-4 mr-2"/> URL</TabsTrigger>
+              <TabsTrigger value="email"><BookOpen className="w-4 h-4 mr-2"/> Email</TabsTrigger>
               <TabsTrigger value="text"><Type className="w-4 h-4 mr-2"/> Text</TabsTrigger>
             </TabsList>
             
@@ -285,6 +322,37 @@ export default function Home() {
                     disabled={isExtracting || !urlInput}
                   >
                     {isExtracting ? "Fetching..." : "Extract Article"}
+                  </Button>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="email">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Extract from Email</CardTitle>
+                  <CardDescription>Paste email HTML/text content here.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Input
+                    placeholder="Email subject"
+                    value={emailSubject}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailSubject(e.target.value)}
+                    disabled={isExtracting}
+                  />
+                  <Textarea
+                    placeholder="Pega aquí el HTML del correo o el texto plano..."
+                    value={emailContent}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEmailContent(e.target.value)}
+                    rows={8}
+                    disabled={isExtracting}
+                  />
+                  <Button
+                    className="w-full"
+                    onClick={handleEmailExtract}
+                    disabled={isExtracting || (!emailContent && !emailSubject)}
+                  >
+                    {isExtracting ? "Procesando..." : "Agregar Email"}
                   </Button>
                 </CardContent>
               </Card>

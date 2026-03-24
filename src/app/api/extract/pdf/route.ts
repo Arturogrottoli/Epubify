@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-const pdf = require("pdf-parse");
+import pdf from "pdf-parse";
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const data = await pdf(Buffer.from(buffer));
     
     // We replace multiple newlines with double newline to keep paragraphs vaguely spaced.
-    let text = data.text.replace(/\n\s*\n/g, '\n\n');
+    const text = data.text.replace(/\n\s*\n/g, '\n\n');
     
     return NextResponse.json({ text });
   } catch (error) {
