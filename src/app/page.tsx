@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -82,6 +81,14 @@ export default function Home() {
   const [metadata, setMetadata] = useState({ title: "My Custom Book", author: "EPUBify User" })
   const [isGenerating, setIsGenerating] = useState(false)
   const [isClient, setIsClient] = useState(false)
+  const [activeTab, setActiveTab] = useState("file")
+
+  const tabInfo: Record<string, { title: string; description: string }> = {
+    file:  { title: "Upload Documents",     description: "Upload one or more PDF or DOCX files to extract their content." },
+    url:   { title: "Extract from URL",     description: "Paste an article or blog post link and we'll pull the text for you." },
+    email: { title: "Extract from Email",   description: "Paste the subject and HTML/text of an email to add it as a chapter." },
+    text:  { title: "Write or Paste Text",  description: "Type your own content or paste plain text directly." },
+  }
 
   useEffect(() => {
     setIsClient(true)
@@ -304,84 +311,86 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             {/* Left Panel - Inputs */}
-            <section className="space-y-4">
-              <Tabs defaultValue="file" className="w-full">
-                <TabsList className="grid w-full grid-cols-4 h-11 bg-muted/40 border border-border/50 rounded-xl p-1">
-                  <TabsTrigger value="file" className="rounded-lg text-xs font-medium gap-1.5 data-[state=active]:bg-purple-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all">
-                    <FileUp className="w-3.5 h-3.5"/> File
-                  </TabsTrigger>
-                  <TabsTrigger value="url" className="rounded-lg text-xs font-medium gap-1.5 data-[state=active]:bg-purple-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all">
-                    <LinkIcon className="w-3.5 h-3.5"/> URL
-                  </TabsTrigger>
-                  <TabsTrigger value="email" className="rounded-lg text-xs font-medium gap-1.5 data-[state=active]:bg-purple-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all">
-                    <BookOpen className="w-3.5 h-3.5"/> Email
-                  </TabsTrigger>
-                  <TabsTrigger value="text" className="rounded-lg text-xs font-medium gap-1.5 data-[state=active]:bg-purple-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all">
-                    <Type className="w-3.5 h-3.5"/> Text
-                  </TabsTrigger>
-                </TabsList>
+            <section className="space-y-5">
 
-                <TabsContent value="file" className="mt-4 space-y-3">
-                  <div>
-                    <h3 className="text-base font-semibold">Upload Documents</h3>
-                    <p className="text-sm text-muted-foreground">PDF or DOCX — one or many at once.</p>
-                  </div>
-                  <div className="relative border-2 border-dashed border-border/60 rounded-xl p-10 text-center hover:border-purple-500/60 hover:bg-purple-500/5 transition-all duration-200 group cursor-pointer">
-                    <input
-                      type="file"
-                      multiple
-                      accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                      onChange={handleFileUpload}
-                      disabled={isExtracting}
-                    />
-                    <div className="flex flex-col items-center gap-3">
-                      <div className="h-14 w-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center group-hover:bg-purple-500/20 group-hover:scale-105 transition-all">
-                        <FileUp className="h-6 w-6 text-purple-400" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-sm">Click or drag files here</p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {isExtracting ? "Extracting content..." : "PDF and DOCX supported"}
-                        </p>
-                      </div>
+              {/* Source type selector */}
+              <div className="grid grid-cols-4 gap-2">
+                {[
+                  { id: "file",  icon: FileUp,   label: "File" },
+                  { id: "url",   icon: LinkIcon,  label: "URL" },
+                  { id: "email", icon: BookOpen,  label: "Email" },
+                  { id: "text",  icon: Type,      label: "Text" },
+                ].map(({ id, icon: Icon, label }) => (
+                  <button
+                    key={id}
+                    onClick={() => setActiveTab(id)}
+                    className={`flex flex-col items-center gap-2 py-4 rounded-xl border-2 transition-all duration-200 ${
+                      activeTab === id
+                        ? "border-purple-500 bg-purple-500/10 text-purple-300"
+                        : "border-border/50 bg-muted/30 text-muted-foreground hover:border-purple-500/40 hover:bg-purple-500/5 hover:text-foreground"
+                    }`}
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span className="text-xs font-medium">{label}</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Título dinámico */}
+              <div className="border-l-2 border-purple-500 pl-3">
+                <h3 className="text-base font-semibold leading-tight">{tabInfo[activeTab].title}</h3>
+                <p className="text-sm text-muted-foreground mt-0.5">{tabInfo[activeTab].description}</p>
+              </div>
+
+              {/* Contenido según tab activa */}
+              {activeTab === "file" && (
+                <div className="relative border-2 border-dashed border-border/60 rounded-xl py-16 text-center hover:border-purple-500/60 hover:bg-purple-500/5 transition-all duration-200 group cursor-pointer">
+                  <input
+                    type="file"
+                    multiple
+                    accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    onChange={handleFileUpload}
+                    disabled={isExtracting}
+                  />
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="h-16 w-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center group-hover:bg-purple-500/20 group-hover:scale-105 transition-all">
+                      <FileUp className="h-7 w-7 text-purple-400" />
+                    </div>
+                    <div>
+                      <p className="font-semibold">Click or drag your files here</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {isExtracting ? "Extracting content..." : "PDF and DOCX supported"}
+                      </p>
                     </div>
                   </div>
-                </TabsContent>
+                </div>
+              )}
 
-                <TabsContent value="url" className="mt-4 space-y-3">
-                  <div>
-                    <h3 className="text-base font-semibold">Extract from URL</h3>
-                    <p className="text-sm text-muted-foreground">Paste an article link to fetch its content.</p>
-                  </div>
+              {activeTab === "url" && (
+                <div className="space-y-3">
                   <Input
                     placeholder="https://example.com/article"
                     value={urlInput}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUrlInput(e.target.value)}
                     disabled={isExtracting}
                     onKeyDown={(e) => e.key === "Enter" && handleUrlExtract()}
-                    className="border-border/60 focus-visible:ring-purple-500/30"
+                    className="h-11 border-border/60 focus-visible:ring-purple-500/30"
                   />
-                  <Button
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-                    onClick={handleUrlExtract}
-                    disabled={isExtracting || !urlInput}
-                  >
+                  <Button className="w-full h-11 bg-purple-600 hover:bg-purple-700 text-white" onClick={handleUrlExtract} disabled={isExtracting || !urlInput}>
                     {isExtracting ? "Fetching..." : "Extract Article"}
                   </Button>
-                </TabsContent>
+                </div>
+              )}
 
-                <TabsContent value="email" className="mt-4 space-y-3">
-                  <div>
-                    <h3 className="text-base font-semibold">Extract from Email</h3>
-                    <p className="text-sm text-muted-foreground">Paste the HTML or plain text of an email.</p>
-                  </div>
+              {activeTab === "email" && (
+                <div className="space-y-3">
                   <Input
                     placeholder="Email subject"
                     value={emailSubject}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailSubject(e.target.value)}
                     disabled={isExtracting}
-                    className="border-border/60 focus-visible:ring-purple-500/30"
+                    className="h-11 border-border/60 focus-visible:ring-purple-500/30"
                   />
                   <Textarea
                     placeholder="Paste email HTML or plain text here..."
@@ -391,25 +400,19 @@ export default function Home() {
                     disabled={isExtracting}
                     className="border-border/60 focus-visible:ring-purple-500/30 resize-none"
                   />
-                  <Button
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-                    onClick={handleEmailExtract}
-                    disabled={isExtracting || (!emailContent && !emailSubject)}
-                  >
+                  <Button className="w-full h-11 bg-purple-600 hover:bg-purple-700 text-white" onClick={handleEmailExtract} disabled={isExtracting || (!emailContent && !emailSubject)}>
                     {isExtracting ? "Processing..." : "Add Email"}
                   </Button>
-                </TabsContent>
+                </div>
+              )}
 
-                <TabsContent value="text" className="mt-4 space-y-3">
-                  <div>
-                    <h3 className="text-base font-semibold">Add Text</h3>
-                    <p className="text-sm text-muted-foreground">Write or paste your own content.</p>
-                  </div>
+              {activeTab === "text" && (
+                <div className="space-y-3">
                   <Input
                     placeholder="Chapter title"
                     value={textTitle}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextTitle(e.target.value)}
-                    className="border-border/60 focus-visible:ring-purple-500/30"
+                    className="h-11 border-border/60 focus-visible:ring-purple-500/30"
                   />
                   <Textarea
                     placeholder="Write your content here..."
@@ -418,15 +421,12 @@ export default function Home() {
                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setTextContent(e.target.value)}
                     className="border-border/60 focus-visible:ring-purple-500/30 resize-none"
                   />
-                  <Button
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-                    onClick={handleAddText}
-                    disabled={!textContent}
-                  >
+                  <Button className="w-full h-11 bg-purple-600 hover:bg-purple-700 text-white" onClick={handleAddText} disabled={!textContent}>
                     Add Chapter
                   </Button>
-                </TabsContent>
-              </Tabs>
+                </div>
+              )}
+
             </section>
 
             {/* Right Panel */}
