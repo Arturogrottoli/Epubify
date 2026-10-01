@@ -207,6 +207,9 @@ export default function Home() {
                 toast.error(`Unsupported file type: ${file.name}`);
                 continue;
             }
+            if (!res.headers.get("content-type")?.includes("application/json")) {
+                throw new Error(`Server error (${res.status})`);
+            }
             const data = await res.json();
             if (!res.ok) throw new Error(data.error);
 

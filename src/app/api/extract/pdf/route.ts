@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import pdf from "pdf-parse";
+// Import the lib entry directly: pdf-parse's index.js runs a debug test that reads a missing sample file.
+import pdf from "pdf-parse/lib/pdf-parse.js";
 
 export async function POST(req: NextRequest) {
   try {
