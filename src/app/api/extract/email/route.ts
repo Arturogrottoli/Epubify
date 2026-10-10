@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as cheerio from "cheerio";
+import { forEachLimited, safeFetch } from "@/lib/safe-fetch";
+
+const IMAGE_MAX_BYTES = 5 * 1024 * 1024;
+const IMAGE_TIMEOUT_MS = 8_000;
+const IMAGES_MAX_COUNT = 100;
+const IMAGES_MAX_TOTAL_BYTES = 25 * 1024 * 1024;
+const IMAGES_TIME_BUDGET_MS = 30_000;
+const IMAGES_CONCURRENCY = 6;
 
 async function inlineImages(html: string, baseUrl: string): Promise<string> {
   const dom = cheerio.load(html);
   const imgElements = dom("img");
+  const imagesDeadline = Date.now() + IMAGES_TIME_BUDGET_MS;
+  let imagesBytes = 0;
 
-  await Promise.all(imgElements.toArray().map(async (el) => {
+  await forEachLimited(imgElements.toArray().slice(0, IMAGES_MAX_COUNT), IMAGES_CONCURRENCY, async (el) => {
     const $img = dom(el);
     const src = $img.attr("src");
     if (!src || src.startsWith("data:")) return;
@@ -17,27 +27,30 @@ async function inlineImages(html: string, baseUrl: string): Promise<string> {
       return;
     }
 
+    const remainingMs = imagesDeadline - Date.now();
+    if (remainingMs <= 0 || imagesBytes >= IMAGES_MAX_TOTAL_BYTES) return;
+
     try {
-      const imgResp = await fetch(resolvedUrl, { headers: { "User-Agent": "Mozilla/5.0 EPUBify/1.0" } });
+      const imgResp = await safeFetch(resolvedUrl, {
+        headers: { "User-Agent": "Mozilla/5.0 EPUBify/1.0" },
+        timeoutMs: Math.min(IMAGE_TIMEOUT_MS, remainingMs),
+        maxBytes: Math.min(IMAGE_MAX_BYTES, IMAGES_MAX_TOTAL_BYTES - imagesBytes),
+        acceptContentType: (type) => !type || type.startsWith("image/"),
+      });
       if (!imgResp.ok) return;
 
-      const contentType = imgResp.headers.get("content-type") || "image/png";
+      const contentType = String(imgResp.headers["content-type"] || "image/png");
       if (!contentType.startsWith("image/")) return;
 
-      const arrayBuffer = await imgResp.arrayBuffer();
-      const bytes = new Uint8Array(arrayBuffer);
-      let binary = "";
-      const chunkSize = 0x8000;
-      for (let i = 0; i < bytes.length; i += chunkSize) {
-        binary += String.fromCharCode.apply(null, Array.from(bytes.subarray(i, Math.min(i + chunkSize, bytes.length))));
-      }
-      const base64 = Buffer.from(binary, "binary").toString("base64");
+      if (imagesBytes + imgResp.body.length > IMAGES_MAX_TOTAL_BYTES) return;
+      imagesBytes += imgResp.body.length;
+      const base64 = imgResp.body.toString("base64");
       $img.attr("src", `data:${contentType};base64,${base64}`);
       $img.removeAttr("srcset");
     } catch {
       // fallback keep original src
     }
-  }));
+  });
 
   return dom.html();
 }
